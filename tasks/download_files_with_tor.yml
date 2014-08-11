@@ -1,0 +1,77 @@
+---
+## FIXME: use a loop
+
+- name: gather state of tbb tarball file
+  stat: path={{ tbb_download_dir }}/{{ tbb_latest_tarball }}
+  register: tbb_tarball_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure last version of tbb is downloaded
+  command: usewithtor wget {{ tbb_latest_tarball_url }} -O {{ tbb_download_dir }}/{{ tbb_latest_tarball }}
+  when: tbb_tarball_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+
+
+- name: gather state of tbb tarball signature
+  stat: path={{ tbb_download_dir }}/{{ tbb_latest_tarball_sig }}
+  register: tbb_tarball_sig_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure tbb gpg signature is downloaded
+  command: usewithtor wget {{ tbb_latest_tarball_sig_url }} -O {{ tbb_download_dir }}/{{ tbb_latest_tarball_sig }}
+  when: tbb_tarball_sig_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+
+
+- name: gather state of sha256sum file
+  stat: path={{ tbb_download_dir }}/{{ sha256sum_file}}
+  register: sha256sum_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure sha256sum file is downloaded
+  command: usewithtor wget {{ sha256sum_url }} -O {{ tbb_download_dir }}/{{ sha256sum_file}}
+  when: sha256sum_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+
+- name: gather state of sha256sum signature
+  stat: path={{ tbb_download_dir }}/{{ sha256sum_file_sig }}
+  register: sha256sum_sig_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure sha256sum signature is downloaded
+  command: usewithtor wget {{ sha256sum_sig_url }} -O {{ tbb_download_dir }}/{{ sha256sum_file_sig }}
+  when: sha256sum_sig_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+
+- name: gather state of sha256sum mike signature
+  stat: path={{ tbb_download_dir }}/{{ sha256sum_file_mike_sig }}
+  register: sha256sum_mike_sig_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure sha256sum mike is downloaded
+  command: usewithtor wget {{ sha256sum_mike_sig_url }} -O {{ tbb_download_dir }}/{{ sha256sum_file_mike_sig }}
+  when: sha256sum_mike_sig_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+
+- name: gather state of sha256sum gk signature
+  stat: path={{ tbb_download_dir }}/{{ sha256sum_file_gk_sig }}
+  register: sha256sum_gk_sig_st
+  tags: 
+    - downloadfileswithtor
+
+- name: ensure sha256sum gk signature is downloaded
+  command: usewithtor wget {{ sha256sum_gk_sig_url }} -O {{ tbb_download_dir }}/{{ sha256sum_file_gk_sig }}
+  when: sha256sum_gk_sig_st.stat.exists == False
+  tags: 
+    - downloadfileswithtor
+

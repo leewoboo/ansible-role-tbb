@@ -1,0 +1,16 @@
+---
+
+##TODO: check which was the older version if not as a variable and import_settings=true
+
+## only import the bookmarks if the version changed
+- name: export tbb other version bookmarks
+  command: 'sqlite3 {{ tbb_older_dir }}/{{ tbb_bookmarks_path }} ".backup main {{ tbb_settings_dir}}/bookmarks.sql"'
+  when: import_settings and tbb_older_dir is defined and tbb_latest_dir_st.stat.exists == False
+  tags:
+    - importbookmarks
+
+- name: import tbb other version bookmarks into latest version
+  command: 'sqlite3 {{ tbb_dir }}/{{ tbb_latest_dir }}/{{ tbb_bookmarks_path }} ".restore main {{ tbb_settings_dir}}/bookmarks.sql"'
+  when: import_settings and tbb_older_dir is defined and tbb_latest_dir_st.stat.exists == False
+  tags:
+    - importbookmarks

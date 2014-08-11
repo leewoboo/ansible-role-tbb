@@ -1,0 +1,20 @@
+---
+
+- name: gather state of tbb dir
+  stat: path={{ tbb_dir }}/{{tbb_latest_dir}}
+  register: tbb_latest_dir_st
+  tags:
+   - untartbb
+
+- name: ensure tbb tarball is extracted
+  command: tar xJf {{ tbb_download_dir}}/{{ tbb_latest_tarball }} --directory {{ tbb_dir }}
+  when: tbb_latest_dir_st.stat.exists == False
+  tags:
+   - untartbb
+
+- name: rename tbb latest dir
+  command: mv {{ tbb_dir }}/{{ tbb_untar_dir }} {{ tbb_dir }}/{{ tbb_latest_dir }}
+  when: tbb_latest_dir_st.stat.exists == False
+  tags:
+   - untartbb
+

@@ -1,0 +1,20 @@
+---
+## create directories
+######################
+
+## FIXME: if the version is new, move older tbb dir, but don't remove it to import the preferences
+
+- name: ensure tbb dir exists
+  file:
+   path={{ item }}
+   owner={{ tbb_user }}
+   state=directory
+  with_items:
+   - "{{ tbb_dir }}"
+   - "{{ tbb_download_dir }}"
+   - "{{ tbb_gnupg_dir }}"
+   - "{{ tbb_keys_dir }}"
+   - "{{ tbb_settings_dir }}"
+  tags: 
+   - createdirs
+

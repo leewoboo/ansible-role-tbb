@@ -1,0 +1,20 @@
+---
+- include: install_deps.yml
+  sudo: true
+  when: install_deps
+- include: create_dirs.yml
+- include: get_tbb_version.yml
+- include: download_files.yml
+  when: use_tor is not defined or not use_tor
+- include: download_files_with_tor.yml
+  when: use_tor
+- include: import_keys.yml
+- include: verify_files.yml
+- include: untar_tbb.yml
+- include: import_settings.yml
+- include: configure_torrc.yml
+  sudo: true
+  when: configure_torrc and tor_control_pw is defined
+- include: run_tbb.yml
+- include: setup_noscript.yml
+  when: setup_noscript

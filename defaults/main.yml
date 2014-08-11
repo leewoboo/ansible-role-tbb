@@ -1,0 +1,113 @@
+---
+
+## Variables that have to be defined by the user
+################################################
+#
+#tbb_older_dir # when using import_settings: true
+#tor_control_pw # when using use_system_tor: true
+
+## Variables that the user might want to change
+################################################
+#
+# the user for who tbb will be installed
+tbb_user: user
+
+## if tor is already running, this variable will download everything through Tor
+## TODO: detect whether tor is already running
+use_tor: true
+
+## to use the system tor instead of the tbb tor
+use_system_tor: true
+## in case of running system tor with a different socks port to the default
+tor_socks_port: 9050
+## in case of running system tor with a different control port to the default
+tor_control_port: 9051
+## to create the hashed tor control password and modify torrc with it.
+## it requires sudo password.
+configure_torrc: false
+
+## to import some settings (currently bookmarks) from other tbb installation 
+import_settings: true
+
+## to install the package dependencies. It requires sudo password
+## If they are not already installed and this variable is false, everythinhg will fail
+install_deps: false
+
+## to setup noscript
+setup_noscript: true
+
+## FIXME: even if the version is specified here and get tbb version is skipped,
+## ansible will complain with:
+##One or more undefined variables: 'dict object' has no attribute 'stdout'
+#tbb_version: { stdout: '3.6.3', }
+#tbb_get_version: true
+
+# the system architecture (23 or 64 bits)
+tbb_arch: 32
+# the tbb language
+tbb_lang: en-US
+
+## Variables that define where to store tbb files
+#################################################
+tbb_user_home: "/home/{{ tbb_user }}"
+tbb_base_dir: "{{ tbb_user_home }}/.tbb"
+tbb_dir: "{{ tbb_base_dir }}/tbb"
+tbb_download_dir: "{{ tbb_base_dir }}/download"
+tbb_gnupg_dir: "{{ tbb_base_dir }}/gnupg_dir"
+tbb_keys_dir: "{{ tbb_base_dir }}/keys"
+tbb_settings_dir: "{{ tbb_base_dir }}/settings"
+
+## Variables that depends on https://www.torproject.org/
+########################################################
+tbb_base_url: https://www.torproject.org/dist/torbrowser
+tbb_version_url: "{{tbb_base_url }}/{{ tbb_version.stdout }}"
+tbb_latest_dir: "tor-browser-linux{{ tbb_arch }}-{{ tbb_version.stdout }}_{{ tbb_lang }}"
+tbb_latest_tarball: "{{ tbb_latest_dir }}.tar.xz"
+tbb_latest_tarball_sig: "{{ tbb_latest_tarball }}.asc"
+tbb_latest_tarball_url: "{{ tbb_version_url }}/{{ tbb_latest_tarball }}"
+tbb_latest_tarball_sig_url: "{{ tbb_version_url }}/{{ tbb_latest_tarball_sig }}"
+# name of the directory where tbb is extracted
+tbb_untar_dir: tor-browser_en-US
+
+sha256sum_file: sha256sums.txt
+sha256sum_file_sig: sha256sums.txt.asc
+sha256sum_file_mike_sig: sha256sums.txt-mikeperry.asc
+sha256sum_file_gk_sig: sha256sums.txt-gk.asc
+
+sha256sum_url: "{{ tbb_version_url }}/{{ sha256sum_file }}"
+sha256sum_sig_url: "{{ tbb_version_url }}/{{ sha256sum_file_sig }}"
+sha256sum_mike_sig_url: "{{ tbb_version_url }}/{{ sha256sum_file_mike_sig }}"
+sha256sum_gk_sig_url: "{{ tbb_version_url }}/{{ sha256sum_file_gk_sig }}"
+
+tbb_recommended_versions_url: https://check.torproject.org/RecommendedTBBVersions
+tbb_recommended_versions_file: RecommendedTBBVersions
+
+# needed to import settings
+tbb_bookmarks_path: "Data/Browser/profile.default/places.sqlite"
+tbb_prefs_path: "Data/Browser/profile.default/prefs.js"
+
+## GPG keys 
+## To keep updated with https://www.torproject.org/docs/signing-keys.html.en
+#########################################
+tbb_keys: 
+   - tbb_erinn_key.pub
+   - tbb_mike_key.pub
+   - tbb_georg_key.pub
+   - tbb_linus_key.pub
+   - tbb_sebastian_key.pub
+   - tbb_nicolas_key.pub
+
+# next variables are not currently used
+tbb_erinn_key: "0x416F061063FEE659"
+tbb_erinn_fp: "8738 A680 B84B 3031 A630  F2DB 416F 0610 63FE E659"
+tbb_mike_key: "0x717F1F130E3A92E4"
+tbb_mike_fp: "C963 C21D 6356 4E2B 10BB  335B 2984 6B3C 6836 86CC"
+tbb_georg_key: "0x94373AA94B7C3223"
+tbb_georg_fp: "35CD 74C2 4A9B 15A1 9E1A  81A1 9437 3AA9 4B7C 3223"
+tbb_nicolas_key: "0xE5B81856D0220E4B"
+tbb_nicolas_fp: "4A90 646C 0BAE D9D4 56AB  3111 E5B8 1856 D022 0E4B"
+tbb_linus_key: "0x1E8BF34923291265"
+tbb_linus_fp: "8C4C D511 095E 982E B0EF  BFA2 1E8B F349 2329 1265"
+tbb_sebastian_key: "0x66C8C2D7C5AA446D"
+tbb_sebastian_fp: "261C 5FBE 7728 5F88 FB0C  3432 66C8 C2D7 C5AA 446D"
+

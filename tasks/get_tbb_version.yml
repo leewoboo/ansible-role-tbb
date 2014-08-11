@@ -1,0 +1,38 @@
+---
+
+- name: ensure tbb versions file is present
+  get_url:
+    url={{ tbb_recommended_versions_url }}
+    dest={{ tbb_download_dir }}/{{ tbb_recommended_versions_file }}
+  when: not use_tor or use_tor is not defined
+  tags: 
+    - gettbbversion
+
+- name: gather state of tbb verions file
+  stat: path={{ tbb_download_dir }}/{{ tbb_recommended_versions_file }}
+  register: tbb_versions_st
+  when: use_tor
+  tags: 
+    - gettbbversion
+
+- name: ensure tbb versions file is present (with usewithtor)
+  command: usewithtor wget {{ tbb_recommended_versions_url }} -O {{ tbb_download_dir }}/{{ tbb_recommended_versions_file }}
+  when: tbb_versions_st.stat.exists == False
+  tags: 
+    - gettbbversion
+
+- name: ensure tbb_get_version.py is present
+  template: 
+    src=tbb_get_version.py.j2
+    dest={{ tbb_base_dir }}/tbb_get_version.py
+    owner={{ tbb_user }}
+    mode=0700
+  tags: 
+    - gettbbversion
+
+- name: get tbb latest version
+  command: "{{ tbb_base_dir }}/tbb_get_version.py"
+  register: tbb_version
+  tags: 
+    - gettbbversion
+

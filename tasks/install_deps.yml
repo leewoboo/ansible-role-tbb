@@ -1,0 +1,26 @@
+---
+## This's in a separate file cause is the only action that will require sudo
+## though some of them won't be required when not running all actions
+- name: install dependencies
+  apt:
+    pkg={{ item }}
+    state=latest
+    install_recommends=no
+  with_items:
+    - wget
+    - gnupg
+    - tor
+    - coreutils
+    - sqlite3
+  when: use_tor is not defined or not use_tor
+  tags:
+    - installdeps
+
+- name: install dependencies (with usewithtor)
+  shell: DEBIAN_FRONTEND=noninteractive usewithtor apt-get install wget gnupg tor coreutils sqlite3 --no-install-recommends -q -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+  environment:
+      DEBIAN_FRONTEND: noninteractive
+  when: use_tor is defined and use_tor
+  tags:
+    - installdeps
+

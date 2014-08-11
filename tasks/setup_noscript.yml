@@ -1,0 +1,20 @@
+---
+## FIXME: will be imported only next time tbb is run, so run tor, change noscript, run tor again 
+## TODO: get the prefs older version
+- name: setup noscript
+  lineinfile:
+    state=present
+    dest={{ tbb_dir }}/{{ tbb_latest_dir }}/{{ tbb_prefs_path }}
+    line="{{ item.line }}"
+    regexp="{{ item.regexp }}"
+  with_items:
+    - { regexp: '^user_pref(\"noscript.autoReload\", true);', line: 'user_pref(\"noscript.autoReload\", true);' }
+    - { regexp: '^user_pref(\"noscript.global\", false);', line: 'user_pref(\"noscript.global\", false);' }
+#    - { regexp: '^user_pref(\"noscript.options.tabSelectedIndexes\", "3,0,0");', line: 'user_pref(\"noscript.options.tabSelectedIndexes, "3,0,0"' }                  
+    - { regexp: '^user_pref(\"noscript.options.tabSelectedIndexes\", "1,1,0");', line: 'user_pref(\"noscript.options.tabSelectedIndexes\", "1,1,0");' }                      
+    - { regexp: '^user_pref(\"noscript.showDomain\", true);', line: 'user_pref(\"noscript.showDomain\", true);' }
+    - { regexp: '^user_pref(\"noscript.showPermanent\", true);', line: 'user_pref(\"noscript.showPermanent\", true);' }
+    - { regexp: '^user_pref(\"noscript.showTemp\", true);', line: 'user_pref(\"noscript.showTemp\", true);' }
+  when: tbb_latest_dir_st.stat.exists == False
+  tags:
+    - setupnoscript

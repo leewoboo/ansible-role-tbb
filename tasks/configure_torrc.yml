@@ -1,0 +1,19 @@
+---
+
+- name: generate hashed tor control password
+  command: tor --hash-password {{ tor_control_pw }}
+  register: hashed_control_pw
+
+- name: ensure hashed tor control password is present
+  sudo: true
+  lineinfile:
+    state=present
+    dest=/etc/tor/torrc
+    line=HashedControlPassword {{ hashed_control_pw }}
+    regexp=^HashedControlPassword
+  register: torrc_st
+
+- name: restart tor
+  sudo: true
+  command: service tor restart
+  when: torrc_st.stat.changed and use_system_tor

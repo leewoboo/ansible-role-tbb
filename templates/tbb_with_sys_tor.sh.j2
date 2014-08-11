@@ -1,0 +1,6 @@
+#!/bin/bash
+export TOR_SKIP_LAUNCH=1
+export TOR_SOCKS_PORT={{ tor_socks_port }}
+export TOR_CONTROL_PORT={{ tor_control_port }}
+export TOR_CONTROL_PASSWD='"{{ tor_control_pw }}"'
+{{ tbb_dir }}/{{ tbb_latest_dir }}/start-tor-browser

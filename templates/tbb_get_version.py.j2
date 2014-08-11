@@ -1,0 +1,11 @@
+#!/usr/bin/python
+import json
+
+system = 'Linux'
+# Assumes last stable release is the one with minor number
+# Doesn't check for unstable releases
+versions_list = json.load(open("{{ tbb_download_dir }}/{{tbb_recommended_versions_file }}"))
+system_versions = [v for v in versions_list if '-'+system in v]
+system_versions.sort()
+latest_version = system_versions[0].strip('-'+system)
+print latest_version

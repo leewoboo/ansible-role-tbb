@@ -1,0 +1,44 @@
+---
+## FIXME: use a loop
+
+- name: ensure last version of tbb is downloaded
+  get_url: 
+    url={{ tbb_latest_tarball_url }}
+    dest={{ tbb_download_dir }}/{{ tbb_latest_tarball }}
+  tags:
+    - downloadfiles
+
+- name: ensure tbb gpg signature is downloaded
+  get_url:
+    url={{ tbb_latest_tarball_sig_url }}
+    dest={{ tbb_download_dir }}/{{ tbb_latest_tarball_sig }}
+  tags:
+    - downloadfiles
+
+- name: ensure sha256sum file is downloaded
+  get_url:
+    url={{ sha256sum_url }}
+    dest={{ tbb_download_dir }}/{{ sha256sum_file}}
+  tags:
+    - downloadfiles
+
+- name: ensure sha256sum signature is downloaded
+  get_url: 
+    url={{ sha256sum_sig_url }}
+    dest={{ tbb_dir }}/{{ sha256sum_file_sig }}
+  tags:
+    - downloadfiles
+  
+- name: ensure sha256sum signature is downloaded
+  get_url: 
+    url={{ sha256sum_mike_sig_url }}
+    dest={{ tbb_dir }}/{{ sha256sum_file_mike_sig }}
+  tags:
+    - downloadfiles
+
+- name: ensure sha256sum signature is downloaded
+  get_url: 
+    url={{ sha256sum_gk_sig_url }}
+    dest={{ tbb_dir }}/{{ sha256sum_file_gk_sig }}
+  tags:
+    - downloadfiles

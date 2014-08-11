@@ -1,0 +1,25 @@
+---
+
+- name: ensure tbb_with_sys_tor.sh script is present
+  template: 
+    src=tbb_with_sys_tor.sh.j2
+    dest={{ tbb_base_dir }}/tbb_with_sys_tor.sh
+    owner={{ tbb_user }}
+    mode=0700
+  when: use_system_tor and tor_control_pw is defined
+  tags:
+    - runtbb
+
+## FIXME: stop other tbb running
+
+- name: run tbb (with system tor)
+  command: "{{ tbb_base_dir }}/tbb_with_sys_tor.sh"
+  when: use_system_tor and tor_control_pw is defined
+  tags:
+    - runtbb
+
+- name: run tbb
+  command: "{{ tbb_dir }}/{{ tbb_latest_dir }}/start-tor-browser"
+  when: use_system_tor is not defined or not use_system_tor
+  tags:
+    - runtbb

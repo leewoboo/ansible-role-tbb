@@ -1,0 +1,74 @@
+---
+## FIXME: use a loop
+
+## FIXME: check that the key with which is verified is actually the of the person that sign it
+- name: gpg verify sha256sum file
+  command: gpg --homedir {{ tbb_gnupg_dir }} --verify {{ sha256sum_file_sig }} {{ sha256sum_file }}
+  args:
+    chdir: "{{ tbb_download_dir }}"
+  register: sha256sum_file_verified
+  tags:
+    - verifyfiles
+
+- name: assert that sha256sum file is verified
+  assert:
+    that: "sha256sum_file_verified.rc == 0"
+  tags:
+    - verifyfiles
+
+- name: gpg verify sha256sum file
+  command: gpg --homedir {{ tbb_gnupg_dir }} --verify {{ sha256sum_file_mike_sig }} {{ sha256sum_file }}
+  args:
+    chdir: "{{ tbb_download_dir }}"
+  register: sha256sum_file_verified
+  tags:
+    - verifyfiles
+
+- name: assert that sha256sum file is verified
+  assert:
+    that: "sha256sum_file_verified.rc == 0"
+  tags:
+    - verifyfiles
+
+- name: gpg verify sha256sum file
+  command: gpg --homedir {{ tbb_gnupg_dir }} --verify {{ sha256sum_file_gk_sig }} {{ sha256sum_file }}
+  args:
+    chdir: "{{ tbb_download_dir }}"
+  register: sha256sum_file_verified
+  tags:
+    - verifyfiles
+
+- name: assert that sha256sum file is verified
+  assert:
+    that: "sha256sum_file_verified.rc == 0"
+  tags:
+    - verifyfiles
+
+- name: ensure sha256sum of tbb tarball is correct
+  shell: grep {{ tbb_latest_tarball }} {{ sha256sum_file }} | sha256sum -c -
+  args:
+    chdir: "{{ tbb_download_dir }}"
+  register: sha256sum_tbb_verified
+  tags:
+    - verifyfiles
+
+- name: assert that tbb file sha256sum is verified
+  assert:
+    that: "sha256sum_tbb_verified.rc == 0"
+  tags:
+    - verifyfiles
+
+- name: gpg verify tbb tarball
+  command: gpg --homedir {{ tbb_gnupg_dir }} --verify {{ tbb_latest_tarball_sig }}
+  args:
+    chdir: "{{ tbb_download_dir }}"
+  register: tbb_tarball_verified
+  tags:
+    - verifyfiles
+
+- name: assert that tbb tarball is verified
+  assert:
+    that: "tbb_tarball_verified.rc == 0"
+  tags:
+    - verifyfiles
+

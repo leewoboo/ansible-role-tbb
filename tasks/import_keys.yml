@@ -1,0 +1,22 @@
+---
+## TODO: import keys from keyservers, check fingerprints and detect revoked keys
+
+# this is not needed if the files path in this role is hardcoded in the next
+# task
+- name: ensure a copy of the gpg keys are present
+  copy: >
+    src={{ item }}
+    dest={{ tbb_keys_dir }}/{{ item }}
+  with_items: tbb_keys
+  tags:
+    - importkeys
+
+# will import gpg even if already present
+- name: import gpg keys
+  command: gpg --homedir {{ tbb_gnupg_dir }} --import {{ item }}
+  args:
+    chdir: "{{ tbb_keys_dir }}"
+  with_items: tbb_keys
+  tags:
+    - importkeys
+
